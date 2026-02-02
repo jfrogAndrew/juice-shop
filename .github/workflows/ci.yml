@@ -234,9 +234,14 @@ jobs:
       - name: Setup JFrog OIDC
         uses: jfrog/setup-jfrog-cli@v4
         with:
-          oidc-provider-name: jfrogAndrew/juice-shop
+          oidc-provider-name: jfrogAndrew/juice-shop@github
         env:
           JF_URL: ${{ vars.JF_URL }}
+
+      - name: Run JFrog CLI
+        run: |
+          # Ping the server
+          jf rt ping 
 
       - name: Upload artifact to Artifactory
         run: |
