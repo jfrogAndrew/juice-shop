@@ -230,15 +230,12 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Setup JFrog CLI
-        uses: jfrog/setup-jfrog-cli@v4 # Use the setup-jfrog-cli action
-        with:
-          # If using OIDC, remove the username/password lines and configure OIDC on the JFrog side
-          # If not using OIDC, use these with your GitHub secrets:
-          artifactory-url: ${{ secrets.JFROG_URL }}
-          # artifactory-user: ${{ secrets.JFROG_USER }}
-          # artifactory-password: ${{ secrets.JFROG_PASSWORD }}
-          # The OIDC integration will automatically handle authentication if configured correctly.
+       # This action sets up the JFrog CLI with Artifactory URL and    a predefined Artifactory oidc integration name
+       - uses: jfrog/setup-jfrog-cli@v4
+         with:
+          oidc-provider-name: hts1-andrewm-demo
+         env:
+           JF_URL: ${{ secrets.JFROG_URL }}
 
       - name: Upload artifact to Artifactory
         run: |
