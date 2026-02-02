@@ -235,8 +235,8 @@ jobs:
         uses: jfrog/setup-jfrog-cli@v4
         with:
           oidc-provider-name: hts1-andrewm-demo
-         env:
-           JF_URL: ${{ secrets.JFROG_URL }}
+        env:
+          JF_URL: ${{ secrets.JFROG_URL }}
 
       - name: Upload artifact to Artifactory
         run: |
