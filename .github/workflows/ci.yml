@@ -234,7 +234,7 @@ jobs:
       - name: Setup JFrog OIDC
         uses: jfrog/setup-jfrog-cli@v4
         with:
-          oidc-provider-name: hts1-andrewm-demo
+          oidc-provider-name: jfrogAndrew/juice-shop@github
         env:
           JF_URL: ${{ secrets.JFROG_URL }}
 
