@@ -220,6 +220,48 @@ jobs:
             VCS_REF=${{ env.VCS_REF }}
             BUILD_DATE=${{ env.BUILD_DATE }}
             CYCLONEDX_NPM_VERSION=${{ env.CYCLONEDX_NPM_VERSION }}
+  jfrog-npm-push:
+    needs: [test, api-test, e2e, custom-config-test, docker-test]
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write # Required for OIDC authentication
+      contents: read
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup JFrog CLI
+        uses: jfrog/setup-jfrog-cli@v4 # Use the setup-jfrog-cli action
+        with:
+          # If using OIDC, remove the username/password lines and configure OIDC on the JFrog side
+          # If not using OIDC, use these with your GitHub secrets:
+          artifactory-url: ${{ secrets.JFROG_URL }}
+          # artifactory-user: ${{ secrets.JFROG_USER }}
+          # artifactory-password: ${{ secrets.JFROG_PASSWORD }}
+          # The OIDC integration will automatically handle authentication if configured correctly.
+
+      - name: Configure JFrog CLI with OIDC (if applicable)
+        # This step is often handled automatically by the setup-jfrog-cli action if OIDC is set up
+        # on the JFrog platform side and permissions: id-token: write is present.
+        run: |
+          # If manual configuration is needed (check JFrog docs for specific OIDC setup)
+          # jf config add ... 
+
+      - name: Build project (example: simple file creation)
+        run: |
+          echo "my artifact content" > artifact.txt
+
+      - name: Upload artifact to Artifactory
+        run: |
+          # 'jf rt upload' command uploads the file and collects build info
+          # Syntax: jf rt upload <files_pattern> <target_repository_path>
+          jf rt upload "Readme.MD" andrewm-juiceshop-npm-local/
+
+      - name: Publish build info to Artifactory
+        run: |
+          # The 'build-publish' command sends all collected build information (artifacts, dependencies, etc.)
+          # to the JFrog Platform, linking it to the uploaded files.
+          jf rt build-publish
   heroku:
     if: github.repository == 'juice-shop/juice-shop' && github.event_name == 'push' && (github.ref == 'refs/heads/develop' || github.ref == 'refs/heads/master')
     needs: [test, api-test, e2e, custom-config-test]
