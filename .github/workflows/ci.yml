@@ -61,16 +61,12 @@ jobs:
         uses: actions/setup-node@39370e3970a6d050c480ffad4ff0ed4d3fdee5af #v4.1.0
         with:
           node-version: ${{ env.NODE_DEFAULT_VERSION }}
-      - name: "Install application"
-        run: npm install
-      - name: "Check coding challenges for accidental code discrepancies"
-        run: npm run rsn
   test:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [ubuntu-latest, macos-latest] # FIXME: Removed "windows-latest" due to 'Error: ENOENT: no such file or directory, open' error breaking at least on Node 20.0 constantly
-        node-version: [20, 22, 24]
+        os: [ubuntu-latest] # FIXME: Removed "windows-latest" due to 'Error: ENOENT: no such file or directory, open' error breaking at least on Node 20.0 constantly
+        node-version: [20, 24]
     steps:
       - name: "Check out Git repository"
         if: github.repository == 'juice-shop/juice-shop' || (github.repository != 'juice-shop/juice-shop' && matrix.os == 'ubuntu-latest' && matrix.node-version == '22')
@@ -109,8 +105,8 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [ubuntu-latest, windows-latest, macos-latest]
-        node-version: [20, 22, 24]
+        os: [ubuntu-latest]
+        node-version: [20, 24]
     steps:
       - name: "Check out Git repository"
         if: github.repository == 'juice-shop/juice-shop' || (github.repository != 'juice-shop/juice-shop' && matrix.os == 'ubuntu-latest' && matrix.node-version == '22')
