@@ -240,13 +240,12 @@ jobs:
           # artifactory-password: ${{ secrets.JFROG_PASSWORD }}
           # The OIDC integration will automatically handle authentication if configured correctly.
 
-      - name: Configure JFrog CLI with OIDC (if applicable)
+      #- name: Configure JFrog CLI with OIDC (if applicable)
         # This step is often handled automatically by the setup-jfrog-cli action if OIDC is set up
         # on the JFrog platform side and permissions: id-token: write is present.
-        run: |
+        #run: |
           # If manual configuration is needed (check JFrog docs for specific OIDC setup)
           # jf config add ... 
-
       - name: Build project (example: simple file creation)
         run: |
           echo "my artifact content" > artifact.txt
